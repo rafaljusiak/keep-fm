@@ -21,6 +21,8 @@ ALLOWED_HOSTS = env.get("ALLOWED_HOSTS", [])
 
 # Application definition
 
+AUTH_USER_MODEL = "users.User"
+
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
