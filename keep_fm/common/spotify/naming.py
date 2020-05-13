@@ -3,4 +3,6 @@ REDUNDANT_ENDINGS = (
     "live",
     "edit",
     "version",
+    "mono",
+    "stereo",
 )

@@ -5,4 +5,8 @@ from keep_fm.scrobbles.models import Scrobble
 
 @admin.register(Scrobble)
 class ScrobbleAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "user",
+        "track",
+        "scrobble_date",
+    )

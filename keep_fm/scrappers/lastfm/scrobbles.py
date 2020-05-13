@@ -2,6 +2,9 @@ import urllib3
 
 from bs4 import BeautifulSoup
 from django.utils import timezone
+from keep_fm.scrobbles.models import Scrobble
+
+from keep_fm.tracks.models import Artist, Track
 
 from keep_fm.common.spotify.naming import REDUNDANT_ENDINGS
 from keep_fm.scrappers.lastfm.base import LastFmScrapper
@@ -18,26 +21,36 @@ class LastFmScrobblesScrapper(LastFmScrapper):
         super().run()
         http = urllib3.PoolManager()
 
-        url = self.get_next_url()
-        r = http.request("GET", url)
-        soup = BeautifulSoup(r.data, "html.parser")
-        rows = soup.find_all("tr", class_="chartlist-row")
-        for row in rows:
-            raw_track_name = row.find("td", class_="chartlist-name").find("a").string
-            raw_track_artist = (
-                row.find("td", class_="chartlist-artist").find("a").string
-            )
-            raw_timestamp = (
-                row.find("td", class_="chartlist-timestamp")
-                .find("span")
-                .attrs.get("title")
-            )
+        while True:
+            url = self.get_next_url()
+            r = http.request("GET", url)
+            soup = BeautifulSoup(r.data, "html.parser")
+            rows = soup.find_all("tr", class_="chartlist-row")
+            for row in rows:
+                raw_track_name = (
+                    row.find("td", class_="chartlist-name").find("a").string
+                )
+                raw_track_artist = (
+                    row.find("td", class_="chartlist-artist").find("a").string
+                )
+                raw_timestamp = (
+                    row.find("td", class_="chartlist-timestamp")
+                    .find("span")
+                    .attrs.get("title")
+                )
 
-            track_name = self.parse_track_name(raw_track_name)
-            track_artist = self.parse_track_artist(raw_track_artist)
-            timestamp = self.parse_timestamp(raw_timestamp)
+                track_name = self.parse_track_name(raw_track_name)
+                track_artist = self.parse_track_artist(raw_track_artist)
+                timestamp = self.parse_timestamp(raw_timestamp)
 
-            print(track_artist, "-", track_name, timestamp)
+                artist, _ = Artist.objects.get_or_create(name=track_artist)
+                track, _ = Track.objects.get_or_create(name=track_name, artist=artist)
+                _, created = Scrobble.objects.get_or_create(
+                    track=track, user_id=self.user_id, scrobble_date=timestamp,
+                )
+                print(f"[{timestamp}][NEW:{created}] {track_artist} - {track_name}")
+            if not len(rows):
+                break
 
     def get_next_url(self):
         self.page_number += 1
@@ -71,5 +84,6 @@ class LastFmScrobblesScrapper(LastFmScrapper):
             hour=int(hour),
             minute=int(minute),
             second=0,
+            microsecond=0,
         )
         return parsed
