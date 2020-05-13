@@ -27,3 +27,4 @@ class Scrobble(ModelMixin, models.Model):
     class Meta:
         verbose_name = _("Scrobble")
         verbose_name_plural = _("Scrobbles")
+        unique_together = ("user", "track", "scrobble_date")
