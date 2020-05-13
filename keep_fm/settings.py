@@ -30,7 +30,12 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = []
+PROJECT_APPS = [
+    "keep_fm.scrappers",
+    "keep_fm.scrobbles",
+    "keep_fm.tracks",
+    "keep_fm.users",
+]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 
