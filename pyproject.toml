@@ -13,6 +13,7 @@ psycopg2-binary = "^2.8.5"
 celery = "^4.4.2"
 gunicorn = "^20.0.4"
 redis = "^3.5.1"
+beautifulsoup4 = "^4.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"
