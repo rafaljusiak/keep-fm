@@ -13,7 +13,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 ENV PATH="$POETRY_PATH/bin:$VENV_PATH/bin:$PATH"
 
 # Install required packages
-RUN apk update && apk add --no-cache coreutils build-base postgresql-dev libffi-dev curl
+RUN apk update && apk add --no-cache coreutils build-base postgresql-dev libffi-dev curl libxml2
 
 # Set work directory
 WORKDIR /app
