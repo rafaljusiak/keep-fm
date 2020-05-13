@@ -1,0 +1,12 @@
+pre-commit:
+  commands:
+    black:
+      glob: "*.py"
+      run: docker-compose run --rm django black {staged_files} --check
+    flake8:
+      glob: "*.py"
+      run: docker-compose run --rm django flake8 {staged_files}
+pre-push:
+  commands:
+    pending-migrations:
+      run: docker-compose run --rm django python manage.py makemigrations --check
