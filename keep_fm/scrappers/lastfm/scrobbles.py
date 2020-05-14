@@ -1,7 +1,6 @@
-import urllib3
-
-from bs4 import BeautifulSoup
 from django.utils import timezone
+
+from keep_fm.scrappers.exceptions import ScrapperEmptyPage
 from keep_fm.scrobbles.models import Scrobble
 
 from keep_fm.tracks.models import Artist, Track
@@ -15,46 +14,40 @@ class LastFmScrobblesScrapper(LastFmScrapper):
         super().setup(lastfm_username, **kwargs)
         self.url = f"https://www.last.fm/user/{self.lastfm_username}/library"
         self.query_string = "?page="
-        self.page_number = 0
-
-    def run(self):
-        super().run()
-        http = urllib3.PoolManager()
-
-        while True:
-            url = self.get_next_url()
-            r = http.request("GET", url)
-            soup = BeautifulSoup(r.data, "html.parser")
-            rows = soup.find_all("tr", class_="chartlist-row")
-            for row in rows:
-                raw_track_name = (
-                    row.find("td", class_="chartlist-name").find("a").string
-                )
-                raw_track_artist = (
-                    row.find("td", class_="chartlist-artist").find("a").string
-                )
-                raw_timestamp = (
-                    row.find("td", class_="chartlist-timestamp")
-                    .find("span")
-                    .attrs.get("title")
-                )
-
-                track_name = self.parse_track_name(raw_track_name)
-                track_artist = self.parse_track_artist(raw_track_artist)
-                timestamp = self.parse_timestamp(raw_timestamp)
-
-                artist, _ = Artist.objects.get_or_create(name=track_artist)
-                track, _ = Track.objects.get_or_create(name=track_name, artist=artist)
-                _, created = Scrobble.objects.get_or_create(
-                    track=track, user_id=self.user_id, scrobble_date=timestamp,
-                )
-                print(f"[{timestamp}][NEW:{created}] {track_artist} - {track_name}")
-            if not len(rows):
-                break
+        self.page_number = kwargs.get("start_page", 1) - 1
 
     def get_next_url(self):
         self.page_number += 1
         return f"{self.url}{self.query_string}{self.page_number}"
+
+    def process_page(self, soup):
+        rows = soup.find_all("tr", class_="chartlist-row")
+        for row in rows:
+            raw_track_name = row.find("td", class_="chartlist-name").find("a").string
+            raw_track_artist = (
+                row.find("td", class_="chartlist-artist").find("a").string
+            )
+            raw_timestamp = (
+                row.find("td", class_="chartlist-timestamp")
+                .find("span")
+                .attrs.get("title")
+            )
+
+            track_name = self.parse_track_name(raw_track_name)
+            track_artist = self.parse_track_artist(raw_track_artist)
+            timestamp = self.parse_timestamp(raw_timestamp)
+
+            artist, _ = Artist.objects.get_or_create(name=track_artist)
+            track, _ = Track.objects.get_or_create(name=track_name, artist=artist)
+            _, created = Scrobble.objects.get_or_create(
+                track=track, user_id=self.user_id, scrobble_date=timestamp,
+            )
+            print(f"[{timestamp}][NEW:{created}] {track_artist} - {track_name}")
+        if not len(rows):
+            raise ScrapperEmptyPage
+
+    def on_scrapper_finish(self):
+        print(f"Last page: {self.page_number}")
 
     def parse_track_name(self, track_name):
         if "-" in track_name:
