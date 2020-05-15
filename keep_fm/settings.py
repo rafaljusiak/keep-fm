@@ -2,6 +2,8 @@ import os
 import env_loader
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from celery.schedules import crontab
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 env = env_loader.load_env(ROOT_DIR, env_type=env_loader.EnvTypes.DEVELOPMENT_ENV)
@@ -125,7 +127,10 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_BEAT_SCHEDULE = {
-    # ...
+    "day_summary": {
+        "task": "keep_fm.scrappers.tasks.scrap_scrobbles",
+        "schedule": crontab(minute=10),
+    }
 }
 
 
