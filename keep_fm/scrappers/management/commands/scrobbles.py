@@ -9,6 +9,7 @@ class Command(BaseCommand):
         parser.add_argument("--start_page", type=int, required=False)
         parser.add_argument("--max_retries", type=int, required=False)
         parser.add_argument("--retry_delay", type=int, required=False)
+        parser.add_argument("--only_create", type=bool, required=False)
 
     def handle(self, *args, **options):
         params = {}
@@ -25,6 +26,10 @@ class Command(BaseCommand):
         retry_delay = options.get("retry_delay")
         if retry_delay:
             params["retry_delay"] = retry_delay
+
+        only_create = options.get("only_create")
+        if only_create:
+            params["only_create"] = only_create
 
         scrapper = LastFmScrobblesScrapper()
         scrapper.setup(lastfm_username=lastfm_username, **params)

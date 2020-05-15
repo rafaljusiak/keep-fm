@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from keep_fm.scrappers.exceptions import ScrapperEmptyPage
+from keep_fm.scrappers.exceptions import ScrapperEmptyPage, ScrapperStop
 from keep_fm.scrobbles.models import Scrobble
 
 from keep_fm.tracks.models import Artist, Track
@@ -15,6 +15,7 @@ class LastFmScrobblesScrapper(LastFmScrapper):
         self.url = f"https://www.last.fm/user/{self.lastfm_username}/library"
         self.query_string = "?page="
         self.page_number = kwargs.get("start_page", 1) - 1
+        self.only_create = kwargs.get("only_create", False)
 
     def get_next_url(self):
         self.page_number += 1
@@ -42,6 +43,8 @@ class LastFmScrobblesScrapper(LastFmScrapper):
             _, created = Scrobble.objects.get_or_create(
                 track=track, user_id=self.user_id, scrobble_date=timestamp,
             )
+            if self.only_create and not created:
+                raise ScrapperStop
             print(f"[{timestamp}][NEW:{created}] {track_artist} - {track_name}")
         if not len(rows):
             raise ScrapperEmptyPage
