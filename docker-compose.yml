@@ -18,7 +18,7 @@ services:
       - .env
     volumes:
       - .:/app
-      - static:/app/static
+      - ./static:/app/static
     ports:
       - "${DJANGO_PORT}:8000"
     depends_on:
