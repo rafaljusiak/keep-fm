@@ -18,6 +18,7 @@ services:
       - .env
     volumes:
       - .:/app
+      - static:/app/static
     ports:
       - "${DJANGO_PORT}:8000"
     depends_on:
@@ -40,3 +41,4 @@ services:
     container_name: keep_fm_redis
 volumes:
   pgdata:
+  static:
