@@ -5,7 +5,7 @@ from keep_fm.scrobbles.models import Scrobble
 
 from keep_fm.tracks.models import Artist, Track
 
-from keep_fm.common.spotify.naming import REDUNDANT_ENDINGS
+from keep_fm.tracks.utils.naming import clean_track_name
 from keep_fm.scrappers.lastfm.base import LastFmScrapper
 
 
@@ -34,7 +34,7 @@ class LastFmScrobblesScrapper(LastFmScrapper):
                 .attrs.get("title")
             )
 
-            track_name = self.parse_track_name(raw_track_name)
+            track_name = clean_track_name(raw_track_name)
             track_artist = self.parse_track_artist(raw_track_artist)
             timestamp = self.parse_timestamp(raw_timestamp)
 
@@ -51,16 +51,6 @@ class LastFmScrobblesScrapper(LastFmScrapper):
 
     def on_scrapper_finish(self):
         print(f"Last page: {self.page_number}")
-
-    def parse_track_name(self, track_name):
-        if "-" in track_name:
-            lower_parsed = track_name.lower().split("-")
-            if any([ending in lower_parsed[-1] for ending in REDUNDANT_ENDINGS]):
-                cleaned_track_name = track_name.rsplit("-", 1)[0]
-                if cleaned_track_name[-1] == " ":
-                    return cleaned_track_name[:-1]
-                return cleaned_track_name
-        return track_name
 
     def parse_track_artist(self, track_artist):
         return track_artist
