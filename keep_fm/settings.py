@@ -44,6 +44,8 @@ PROJECT_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
 
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -70,6 +72,11 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
+    },
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "OPTIONS": {"environment": "keep_fm.jinja2.environment"},
     },
 ]
 
