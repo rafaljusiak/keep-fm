@@ -39,4 +39,4 @@ def get_track_audio_analysis(track_spotify_uri):
 
 def get_track_audio_features(track_spotify_uri):
     client = SpotifyConnector().get_connector()
-    return client.audio_features([track_spotify_uri])
+    return client.audio_features([track_spotify_uri])[0]

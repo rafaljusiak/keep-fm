@@ -3,6 +3,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from keep_fm.common.models import ModelMixin
+from keep_fm.external.spotify.processors import map_track_data, map_track_features_data
 from keep_fm.external.spotify.utils import (
     get_track_data,
     get_track_uri,
@@ -37,6 +38,8 @@ class Track(ModelMixin, models.Model):
     @cached_property
     def spotify_data(self):
         data = get_track_data(self.name, self.artist.name)
+        if data:
+            data = map_track_data(data)
         return data
 
     @cached_property
@@ -52,6 +55,8 @@ class Track(ModelMixin, models.Model):
         spotify_uri = self.spotify_uri or get_track_uri(self.name, self.artist.name)
         if spotify_uri:
             data = get_track_audio_features(spotify_uri)
+            if data:
+                data = map_track_features_data(data)
             return data
         return None
 
