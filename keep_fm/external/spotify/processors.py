@@ -17,7 +17,7 @@ def map_track_features_data(track_audio_features_data):
         "tempo",
     )
     duration = track_audio_features_data.get("duration_ms") / 1000.0
-    duration_str = f"{duration / 60}:{duration % 60}"
+    duration_str = f"{int(duration / 60)}:{int(duration % 60)}"
     results = {"duration": duration, "duration_str": duration_str}
     results.update({key: track_audio_features_data[key] for key in flat_keys})
     return results
