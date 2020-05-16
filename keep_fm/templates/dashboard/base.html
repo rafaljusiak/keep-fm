@@ -1,5 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Dashboard</h2>
+    <h2>Dashboard</h2>
+    <h3>Hi {{ request.user.username }} :-)</h3>
+    <h4>Scrobbles: {{ total_scrobbles }}</h4>
+
+    <ul>
+        {% for scrobble in last_scrobbles %}
+            <li>{{ scrobble.track.artist.name }} - {{ scrobble.track.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <ol>
+        {% for row in top_tracks %}
+            <li>{{ row.track__artist__name }} - {{ row.track__name }} {{ row.count }}</li>
+        {% endfor %}
+    </ol>
+
+    <ol>
+        {% for row in top_artists %}
+            <li>{{ row.track__artist__name }} {{ row.count }}</li>
+        {% endfor %}
+    </ol>
 {% endblock %}
