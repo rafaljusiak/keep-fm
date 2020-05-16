@@ -6,6 +6,7 @@ services:
     container_name: keep_fm_postgres
     env_file:
       - .env
+      - .env.local
     volumes:
       - pgdata:/var/lib/postgresql/data
   django:
@@ -16,6 +17,7 @@ services:
     command: gunicorn keep_fm.wsgi:application --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT}
     env_file:
       - .env
+      - .env.local
     volumes:
       - .:/app
       - ./static:/app/static
@@ -34,6 +36,7 @@ services:
       - db
     env_file:
       - .env
+      - .env.local
     volumes:
       - .:/app
   redis:

@@ -43,6 +43,16 @@ def collectstatic(c):
 
 
 @task
+def shell(c):
+    docker_run(c, "sh", pty=True)
+
+
+@task
+def python_shell(c):
+    docker_run(c, "python manage.py shell", pty=True)
+
+
+@task
 def quality(c):
     docker_run(c, "black .")
     docker_run(c, "flake8 .")
@@ -72,3 +82,8 @@ def add_dev_dep(c, dependency):
 @task
 def update_dep(c, dependencies):
     docker_run(c, "poetry update " + dependencies)
+
+
+@task
+def install_deps(c):
+    docker_run(c, "poetry install --no-interaction --no-ansi -vvv")

@@ -35,6 +35,7 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
+    "keep_fm.external",
     "keep_fm.scrappers",
     "keep_fm.scrobbles",
     "keep_fm.tracks",

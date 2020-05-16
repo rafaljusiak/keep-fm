@@ -18,3 +18,7 @@ class TrackAdmin(admin.ModelAdmin):
         "name",
         "artist_id",
     )
+    readonly_fields = (
+        "spotify_data",
+        "spotify_audio_features",
+    )
