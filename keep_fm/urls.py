@@ -13,4 +13,9 @@ urlpatterns = [
     path("login", users.LoginUserView.as_view(), name="login"),
     path("logout", logout_then_login, name="logout"),
     path("", login_required(common.DashboardView.as_view()), name="dashboard"),
+    path(
+        "combined",
+        login_required(common.CombinedRankingView.as_view()),
+        name="combined",
+    ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
