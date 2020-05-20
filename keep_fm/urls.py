@@ -14,8 +14,26 @@ urlpatterns = [
     path("logout", logout_then_login, name="logout"),
     path("", login_required(common.DashboardView.as_view()), name="dashboard"),
     path(
+        "tracks", login_required(common.TracksRankingView.as_view()), name="top-tracks",
+    ),
+    path(
+        "artists",
+        login_required(common.ArtistsRankingView.as_view()),
+        name="top-artists",
+    ),
+    path(
         "combined",
         login_required(common.CombinedRankingView.as_view()),
-        name="combined",
+        name="top-combined",
+    ),
+    path(
+        "combined/tracks",
+        login_required(common.CombinedTracksRankingView.as_view()),
+        name="top-combined-tracks",
+    ),
+    path(
+        "combined/artists",
+        login_required(common.CombinedArtistsRankingView.as_view()),
+        name="top-combined-artists",
     ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

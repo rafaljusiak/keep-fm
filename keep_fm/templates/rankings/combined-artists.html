@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        {{ form }}
+        <button type="submit">Combine</button>
+    </form>
+
+    <ol>
+        {% for row in top_artists %}
+            <li>{{ row.track__artist__name }} {{ row.count }}</li>
+        {% endfor %}
+    </ol>
+{% endblock %}

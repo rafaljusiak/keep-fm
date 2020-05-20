@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ol>
+        {% for row in top_tracks %}
+            <li>{{ row.track__artist__name }} - {{ row.track__name }} {{ row.count }}</li>
+        {% endfor %}
+    </ol>
+{% endblock %}
