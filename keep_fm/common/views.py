@@ -19,18 +19,10 @@ class DashboardView(generic.TemplateView):
         )[:30]
         context["last_scrobbles"] = last_scrobbles
 
-        top_tracks = (
-            scrobbles_qs.values("track_id", "track__name", "track__artist__name")
-            .annotate(count=Count("track_id"))
-            .order_by("-count")[:20]
-        )
+        top_tracks = scrobbles_qs.top_tracks()
         context["top_tracks"] = top_tracks
 
-        top_artists = (
-            scrobbles_qs.values("track__artist__name",)
-            .annotate(count=Count("track__artist__name"),)
-            .order_by("-count")[:20]
-        )
+        top_artists = scrobbles_qs.top_artists()
         context["top_artists"] = top_artists
 
         return context
@@ -49,17 +41,11 @@ class CombinedRankingView(generic.FormView):
             )
             context["total_scrobbles"] = scrobbles_qs.count()
 
-            last_scrobbles = scrobbles_qs.select_related(
-                "track", "track__artist"
-            ).order_by("-scrobble_date")[:30]
-            context["last_scrobbles"] = last_scrobbles
-
-            top_tracks = (
-                scrobbles_qs.values("track_id", "track__name", "track__artist__name")
-                .annotate(count=Count("track_id"))
-                .order_by("-count")[:20]
-            )
+            top_tracks = scrobbles_qs.top_tracks()
             context["top_tracks"] = top_tracks
+
+            top_artists = scrobbles_qs.top_artists()
+            context["top_artists"] = top_artists
 
             top_artists = (
                 scrobbles_qs.values("track__artist__name",)

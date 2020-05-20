@@ -3,9 +3,12 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from keep_fm.common.models import ModelMixin
+from keep_fm.scrobbles.querysets import ScrobblesQueryset
 
 
 class Scrobble(ModelMixin, models.Model):
+    objects = ScrobblesQueryset.as_manager()
+
     user = models.ForeignKey(
         "users.User",
         related_name="scrobbles",
