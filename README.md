@@ -2,7 +2,7 @@
 
 Unofficial tool made to save your scrobbles data from https://last.fm locally, and to give opportunity to work with your data.
 **Commercial usage is PROHIBITED** - you can **ONLY** use it for **personal** and **non-public** purpose.
-In the other words - this web application **can't be hosted on the internet** and you can **ONLY scrap data from YOUR account**.
+In other words - this web application **can't be hosted on the internet** and you can **ONLY scrap data from YOUR account**.
 The user, not the author of the code, is responsible for any illegal use.
 
 ## Idea
