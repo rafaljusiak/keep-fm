@@ -10,6 +10,7 @@ from keep_fm.external.spotify.utils import (
     get_track_audio_analysis,
     get_track_audio_features,
 )
+from keep_fm.tracks.slugs import slugify_track
 
 
 class Artist(ModelMixin, models.Model):
@@ -31,6 +32,7 @@ class Track(ModelMixin, models.Model):
         verbose_name=_("Artist"),
     )
     name = models.CharField(_("Name"), max_length=1024)
+    slug = models.SlugField(null=True, blank=True, max_length=2048)
     spotify_uri = models.CharField(
         _("Spotify API URI"), max_length=512, null=True, blank=True
     )
@@ -64,6 +66,11 @@ class Track(ModelMixin, models.Model):
         if not self.spotify_uri or overwrite:
             uri = get_track_uri(self.name, self.artist.name)
             self.spotify_uri = uri
+            self.save()
+
+    def set_slug(self, overwrite=False):
+        if not self.slug or overwrite:
+            self.slug = slugify_track(self.artist.name, self.name)
             self.save()
 
     def __str__(self):

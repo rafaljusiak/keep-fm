@@ -1,9 +1,7 @@
 from django.utils import timezone
 
 from keep_fm.scrappers.exceptions import ScrapperEmptyPage, ScrapperStop
-from keep_fm.scrobbles.models import Scrobble
-
-from keep_fm.tracks.models import Artist, Track
+from keep_fm.scrobbles.processors import ScrobbleProcessor
 
 from keep_fm.tracks.utils.naming import clean_track_name
 from keep_fm.scrappers.lastfm.base import LastFmScrapper
@@ -38,10 +36,11 @@ class LastFmScrobblesScrapper(LastFmScrapper):
             track_artist = self.parse_track_artist(raw_track_artist)
             timestamp = self.parse_timestamp(raw_timestamp)
 
-            artist, _ = Artist.objects.get_or_create(name=track_artist)
-            track, _ = Track.objects.get_or_create(name=track_name, artist=artist)
-            _, created = Scrobble.objects.get_or_create(
-                track=track, user_id=self.user_id, scrobble_date=timestamp,
+            _, created = ScrobbleProcessor.process_and_save(
+                user_id=self.user_id,
+                artist_name=track_artist,
+                track_name=track_name,
+                timestamp=timestamp,
             )
             if self.only_create and not created:
                 raise ScrapperStop

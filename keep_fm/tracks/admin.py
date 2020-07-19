@@ -23,6 +23,7 @@ class TrackAdmin(admin.ModelAdmin):
     readonly_fields = (
         "spotify_data",
         "spotify_audio_features",
+        "slug",
     )
     list_select_related = ("artist",)
     autocomplete_fields = ("artist",)
