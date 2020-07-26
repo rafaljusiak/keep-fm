@@ -13,7 +13,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         params = {}
-        lastfm_username = options.get("lastfm_username")
+        lastfm_username_param_value = options.get("lastfm_username")
+        lastfm_usernames = lastfm_username_param_value.split(",")
 
         start_page = options.get("start_page")
         if start_page:
@@ -31,6 +32,7 @@ class Command(BaseCommand):
         if only_create:
             params["only_create"] = only_create
 
-        scrapper = LastFmScrobblesScrapper()
-        scrapper.setup(lastfm_username=lastfm_username, **params)
-        scrapper.run()
+        for lastfm_username in lastfm_usernames:
+            scrapper = LastFmScrobblesScrapper()
+            scrapper.setup(lastfm_username=lastfm_username, **params)
+            scrapper.run()
