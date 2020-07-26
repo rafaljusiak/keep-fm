@@ -12,6 +12,7 @@ class ScrobbleProcessor:
         track = Track.objects.filter(slug=track_slug).first()
         if not track:
             track = Track.objects.create(name=track_name, artist=artist)
+            track.set_slug()
         return Scrobble.objects.get_or_create(
             track=track, user_id=user_id, scrobble_date=timestamp,
         )
