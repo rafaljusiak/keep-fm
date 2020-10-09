@@ -6,6 +6,8 @@ pre-commit:
     flake8:
       glob: "*.py"
       run: docker-compose run --rm django flake8 {staged_files}
+    mypy:
+      run: docker-compose run --rm django mypy
 pre-push:
   commands:
     pending-migrations:

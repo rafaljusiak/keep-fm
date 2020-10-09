@@ -1,11 +1,11 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 from keep_fm.users.models import User
 
 
 @admin.register(User)
-class UserAdmin(UserAdmin):
+class UserAdmin(DjangoUserAdmin):
     list_display = (
         "id",
         "username",
@@ -13,6 +13,6 @@ class UserAdmin(UserAdmin):
         "lastfm_username",
     )
 
-    fieldsets = UserAdmin.fieldsets + (
+    fieldsets = DjangoUserAdmin.fieldsets + (
         ("Configuration", {"fields": ("lastfm_username",)}),
-    )
+    )  # type: ignore

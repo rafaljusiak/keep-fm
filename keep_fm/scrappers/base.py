@@ -1,4 +1,5 @@
 import time
+from typing import Tuple
 
 import urllib3
 from bs4 import BeautifulSoup
@@ -12,8 +13,8 @@ from keep_fm.scrappers.exceptions import (
 
 
 class Scrapper:
-    _ALWAYS_REQUIRED = ("url",)
-    REQUIRED_DATA = ()
+    _ALWAYS_REQUIRED: Tuple[str, ...] = ("url",)
+    REQUIRED_DATA: Tuple[str, ...]
 
     url = None
     query_string = None

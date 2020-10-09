@@ -7,7 +7,7 @@ TYPE_PLAYLIST = "playlist"
 
 
 class SpotifySearch:
-    search_type = None
+    search_type: str
 
     def __init__(self):
         self._client = SpotifyConnector().get_connector()

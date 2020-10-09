@@ -56,12 +56,14 @@ def python_shell(c):
 def quality(c):
     docker_run(c, "black .")
     docker_run(c, "flake8 .")
+    docker_run(c, "mypy")
 
 
 @task
 def quality_check(c):
     docker_run(c, "black . --check")
     docker_run(c, "flake8 .")
+    docker_run(c, "mypy")
 
 
 @task

@@ -6,7 +6,7 @@ from keep_fm.common.models import ModelMixin
 
 
 class User(ModelMixin, AbstractUser):
-    objects = UserManager()
+    objects: UserManager = UserManager()
 
     tracks = models.ManyToManyField(
         "tracks.Track", related_name="listeners", through="scrobbles.Scrobble"

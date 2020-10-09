@@ -1,3 +1,6 @@
+from typing import Type
+
+from django import forms
 from django.views import generic
 
 from keep_fm.common.forms import CombinedRankingForm
@@ -49,8 +52,8 @@ class TracksRankingView(generic.TemplateView):
         return context
 
 
-class CombinedRankingMixin(generic.View):
-    form_class = CombinedRankingForm
+class CombinedRankingMixin(generic.FormView):
+    form_class: Type[forms.Form] = CombinedRankingForm
 
     def get_success_url(self):
         user_id = self.request.POST.get("user")
