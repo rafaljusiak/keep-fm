@@ -14,6 +14,7 @@ services:
       context: .
       dockerfile: docker/backend/Dockerfile
     container_name: keep_fm_backend
+    image: keep-fm-backend
     command: gunicorn keep_fm.wsgi:application --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT}
     env_file:
       - .env
@@ -26,10 +27,8 @@ services:
     depends_on:
       - db
   worker:
-    build:
-      context: .
-      dockerfile: docker/backend/Dockerfile
     container_name: keep_fm_worker
+    image: keep-fm-backend
     command: celery worker -B -l info -A keep_fm.celery
     depends_on:
       - redis
