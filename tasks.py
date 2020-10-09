@@ -53,6 +53,16 @@ def python_shell(c):
 
 
 @task
+def create_super_user(c):
+    docker_run(c, "python manage.py createsuperuser", pty=True)
+
+
+@task
+def update_data(c, args=""):
+    docker_run(c, f"python manage.py scrobbles {args}")
+
+
+@task
 def quality(c):
     docker_run(c, "black .")
     docker_run(c, "flake8 .")
