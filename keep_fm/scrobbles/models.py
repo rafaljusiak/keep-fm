@@ -24,7 +24,7 @@ class Scrobble(ModelMixin, models.Model):
 
     scrobble_date = models.DateTimeField(_("Scrobble date"), default=timezone.now,)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.user_id} {self.track_id} {self.created_at}"
 
     class Meta:

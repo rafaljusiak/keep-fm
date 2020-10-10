@@ -1,3 +1,7 @@
+from datetime import datetime
+from typing import Any
+
+from bs4 import BeautifulSoup
 from django.utils import timezone
 
 from keep_fm.scrappers.exceptions import ScrapperEmptyPage, ScrapperStop
@@ -8,18 +12,18 @@ from keep_fm.scrappers.lastfm.base import LastFmScrapper
 
 
 class LastFmScrobblesScrapper(LastFmScrapper):
-    def setup(self, lastfm_username, **kwargs):
-        super().setup(lastfm_username, **kwargs)
+    def setup(self, *args: Any, **kwargs: Any) -> None:
+        super().setup(*args, **kwargs)
         self.url = f"https://www.last.fm/user/{self.lastfm_username}/library"
         self.query_string = "?page="
         self.page_number = kwargs.get("start_page", 1) - 1
         self.only_create = kwargs.get("only_create", False)
 
-    def get_next_url(self):
+    def get_next_url(self) -> str:
         self.page_number += 1
         return f"{self.url}{self.query_string}{self.page_number}"
 
-    def process_page(self, soup):
+    def process_page(self, soup: BeautifulSoup) -> None:
         rows = soup.find_all("tr", class_="chartlist-row")
         for row in rows:
             raw_track_name = row.find("td", class_="chartlist-name").find("a").string
@@ -48,13 +52,13 @@ class LastFmScrobblesScrapper(LastFmScrapper):
         if not len(rows):
             raise ScrapperEmptyPage
 
-    def on_scrapper_finish(self):
+    def on_scrapper_finish(self) -> None:
         print(f"Last page: {self.page_number}")
 
-    def parse_track_artist(self, track_artist):
+    def parse_track_artist(self, track_artist: str) -> str:
         return track_artist
 
-    def parse_timestamp(self, timestamp):
+    def parse_timestamp(self, timestamp: str) -> datetime:
         cleaned = timestamp.replace(",", "").split(" ")
         day = cleaned[1]
         month = timezone.datetime.strptime(cleaned[2], "%b").month

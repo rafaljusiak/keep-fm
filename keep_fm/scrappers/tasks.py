@@ -5,7 +5,7 @@ from keep_fm.scrappers.lastfm.scrobbles import LastFmScrobblesScrapper
 
 
 @shared_task
-def scrap_scrobbles():
+def scrap_scrobbles() -> None:
     scrapper = LastFmScrobblesScrapper()
     users = User.objects.filter(lastfm_username__isnull=False)
     for user in users:

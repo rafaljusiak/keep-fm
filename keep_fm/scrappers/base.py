@@ -1,5 +1,5 @@
 import time
-from typing import Tuple
+from typing import Tuple, Any
 
 import urllib3
 from bs4 import BeautifulSoup
@@ -16,21 +16,22 @@ class Scrapper:
     _ALWAYS_REQUIRED: Tuple[str, ...] = ("url",)
     REQUIRED_DATA: Tuple[str, ...]
 
-    url = None
-    query_string = None
-    page_number = None
-    max_retries = None
-    retry_delay = None
+    http: urllib3.PoolManager
+    url: str
+    query_string: str
+    page_number: int
+    max_retries: int
+    retry_delay: int
 
     def __init__(self):
         self.http = urllib3.PoolManager()
 
     @property
-    def all_required_data(self):
+    def all_required_data(self) -> Tuple[str, ...]:
         return self._ALWAYS_REQUIRED + self.REQUIRED_DATA
 
     @property
-    def is_ready(self):
+    def is_ready(self) -> bool:
         return all(
             [
                 getattr(self, field_name) is not None
@@ -38,22 +39,22 @@ class Scrapper:
             ]
         )
 
-    def setup(self, **kwargs):
+    def setup(self, *args: Any, **kwargs: Any) -> None:
         self.max_retries = kwargs.get("max_retries", settings.SCRAPPER_MAX_RETRY)
         self.retry_delay = kwargs.get("retry_delay", settings.SCRAPPER_RETRY_DELAY)
 
-    def get_next_url(self):
+    def get_next_url(self) -> str:
         raise NotImplementedError
 
-    def process_page(self, url):
+    def process_page(self, url: str) -> None:
         raise NotImplementedError
 
-    def prepare_soup(self, url):
+    def prepare_soup(self, url: str) -> BeautifulSoup:
         r = self.http.request("GET", url)
         soup = BeautifulSoup(r.data, "html.parser")
         return soup
 
-    def pre_run(self):
+    def pre_run(self) -> None:
         if not self.is_ready:
             raise ScrapperSetupException(
                 "Tried to run scrapper without setup or setup method is invalid"
@@ -63,7 +64,7 @@ class Scrapper:
         print(f"Max retries: {self.max_retries}")
         print(f"Delay time: {self.retry_delay}s")
 
-    def run(self):
+    def run(self) -> None:
         self.pre_run()
         while True:
             url = self.get_next_url()
@@ -89,11 +90,11 @@ class Scrapper:
                 self.on_scrapper_finish()
                 break
 
-    def on_scrapper_empty_page(self):
+    def on_scrapper_empty_page(self) -> None:
         pass
 
-    def on_scrapper_stop(self):
+    def on_scrapper_stop(self) -> None:
         pass
 
-    def on_scrapper_finish(self):
+    def on_scrapper_finish(self) -> None:
         pass

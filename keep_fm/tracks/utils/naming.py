@@ -8,7 +8,7 @@ REDUNDANT_ENDINGS = (
 )
 
 
-def clean_track_name(track_name):
+def clean_track_name(track_name: str) -> str:
     if "-" in track_name:
         lower_parsed = track_name.lower().split("-")
         if any([ending in lower_parsed[-1] for ending in REDUNDANT_ENDINGS]):
