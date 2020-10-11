@@ -13,4 +13,4 @@ pre-push:
     pending-migrations:
       run: docker-compose run --rm django python manage.py makemigrations --check
     pytest:
-      run: docker-compose run --rm pytest .
+      run: docker-compose run --rm django pytest .
