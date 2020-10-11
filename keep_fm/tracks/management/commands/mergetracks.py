@@ -8,6 +8,13 @@ from keep_fm.tracks.models import Track
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        """
+        Iterates over all Tracks in the database and merges them if there are any duplicates.
+        Scrobbles are also re-associated with a proper Tracks if the redundant Tracks are removed.
+        It should be used each time when clean/unique definitions did changed.
+
+        Warning - this operation can't be reverted.
+        """
         tracks = Track.objects.all()
         total_count = tracks.count()
 

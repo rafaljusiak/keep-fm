@@ -2,6 +2,10 @@ from typing import Dict, Any, Union, Optional
 
 
 def map_track_data(track_data: Dict[str, Any]) -> Dict[str, Union[str, int, float]]:
+    """
+    Maps track data from Spotify API (like a popularity of a track
+    and URL to tracks preview) and returns a new dictionary
+    """
     flat_keys = ("popularity", "preview_url")
     return {key: track_data[key] for key in flat_keys}
 
@@ -9,6 +13,10 @@ def map_track_data(track_data: Dict[str, Any]) -> Dict[str, Union[str, int, floa
 def map_track_features_data(
     track_audio_features_data: Dict[str, Any]
 ) -> Dict[str, Union[str, int, float]]:
+    """
+    Maps track features data from Spotify API (like a duration or
+    liveness of a song) and returns a new dictionary
+    """
     flat_keys = (
         "duration_ms",
         "danceability",
@@ -29,6 +37,7 @@ def map_track_features_data(
 
 
 def map_album_data(track_album_data: Dict[str, Any]) -> Dict[str, Optional[str]]:
+    """ Maps album track data from Spotify API """
     name = track_album_data.get("name")
     return {
         "name": name,

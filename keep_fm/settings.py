@@ -36,7 +36,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
     "keep_fm.external",
-    "keep_fm.scrappers",
+    "keep_fm.scrapers",
     "keep_fm.scrobbles",
     "keep_fm.tracks",
     "keep_fm.users",
@@ -137,7 +137,7 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_BEAT_SCHEDULE = {
     "day_summary": {
-        "task": "keep_fm.scrappers.tasks.scrap_scrobbles",
+        "task": "keep_fm.scrapers.tasks.scrap_scrobbles",
         "schedule": crontab(minute=10),
     }
 }

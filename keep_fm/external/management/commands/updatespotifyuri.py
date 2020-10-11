@@ -7,6 +7,10 @@ from keep_fm.tracks.models import Track
 
 
 class Command(BaseCommand):
+    """
+    Updates Spotify URI for all tracks in the database.
+    """
+
     def add_arguments(self, parser):
         parser.add_argument("--overwrite", type=bool, required=False)
 

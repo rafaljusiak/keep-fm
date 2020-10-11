@@ -1,12 +1,23 @@
 from typing import Any
 
-from keep_fm.scrappers.base import Scrapper
+from keep_fm.scrapers.base import Scraper
 from keep_fm.users.models import User
 
 
-class LastFmScrapper(Scrapper):
-    REQUIRED_DATA = ("lastfm_username", "user_id", "url")
+class LastFmScraper(Scraper):
+    """
+    Base LastFm scraper that can be used to scrap data from this page.
+    It adds a requirement for giving a last.fm user name, and User id from the
+    keep.fm database to properly extract and process data, and then
+    save it to the local database.
+    """
+
+    REQUIRED_DATA = ("lastfm_username", "user_id")
+
+    # User's last.fm username
     lastfm_username: str
+
+    # Id of User instance in the database
     user_id: int
 
     def setup(self, *args: Any, **kwargs: Any) -> None:

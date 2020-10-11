@@ -7,6 +7,11 @@ from keep_fm.scrobbles.querysets import ScrobblesQueryset
 
 
 class Scrobble(ModelMixin, models.Model):
+    """
+    Model that represents a Last.fm scrobble.
+    In general - it's basically a timestamp of a Track listened by the User.
+    """
+
     objects = ScrobblesQueryset.as_manager()
 
     user = models.ForeignKey(
@@ -22,6 +27,7 @@ class Scrobble(ModelMixin, models.Model):
         verbose_name=_("Track"),
     )
 
+    # Timestamp of a Scrobble (when exactly the track was scrobbled)
     scrobble_date = models.DateTimeField(_("Scrobble date"), default=timezone.now,)
 
     def __str__(self) -> str:

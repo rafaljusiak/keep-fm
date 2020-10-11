@@ -8,6 +8,8 @@ from keep_fm.scrobbles.models import Scrobble
 
 
 class DashboardView(generic.TemplateView):
+    """Main dashboard view - entry point for a user after login."""
+
     template_name = "dashboard/base.html"
 
     def get_context_data(self, **kwargs):
@@ -31,6 +33,8 @@ class DashboardView(generic.TemplateView):
 
 
 class ArtistsRankingView(generic.TemplateView):
+    """ Ranking of user's 300 top listened artists """
+
     template_name = "rankings/artists.html"
 
     def get_context_data(self, **kwargs):
@@ -42,6 +46,8 @@ class ArtistsRankingView(generic.TemplateView):
 
 
 class TracksRankingView(generic.TemplateView):
+    """ Ranking of user's 300 top listened tracks """
+
     template_name = "rankings/tracks.html"
 
     def get_context_data(self, **kwargs):
@@ -53,6 +59,11 @@ class TracksRankingView(generic.TemplateView):
 
 
 class CombinedRankingMixin(generic.FormView):
+    """
+    Mixin used for combined ranking views. It renders a CombinedRankingForm
+    and passes a selected User id in a query string.
+    """
+
     form_class: Type[forms.Form] = CombinedRankingForm
 
     def get_success_url(self):
@@ -63,6 +74,8 @@ class CombinedRankingMixin(generic.FormView):
 
 
 class CombinedRankingView(CombinedRankingMixin, generic.FormView):
+    """ Rankings of logged in and selected Users """
+
     template_name = "rankings/combined.html"
 
     def get_context_data(self, **kwargs):
@@ -83,6 +96,8 @@ class CombinedRankingView(CombinedRankingMixin, generic.FormView):
 
 
 class CombinedTracksRankingView(CombinedRankingMixin, generic.FormView):
+    """ Ranking of logged in and selected Users 300 top listened tracks """
+
     form_class = CombinedRankingForm
     template_name = "rankings/combined-tracks.html"
 
@@ -99,6 +114,8 @@ class CombinedTracksRankingView(CombinedRankingMixin, generic.FormView):
 
 
 class CombinedArtistsRankingView(CombinedRankingMixin, generic.FormView):
+    """ Ranking of logged in and selected Users 300 top listened artists """
+
     form_class = CombinedRankingForm
     template_name = "rankings/combined-artists.html"
 

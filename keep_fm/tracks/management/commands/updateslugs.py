@@ -6,6 +6,12 @@ from keep_fm.tracks.models import Track
 
 
 class Command(BaseCommand):
+    """
+    Creates slug for tracks that don't have it created.
+    If --overwrite flag is added - then this command overwrites all
+    existing slugs.
+    """
+
     def add_arguments(self, parser):
         parser.add_argument("--overwrite", type=bool, required=False)
 
