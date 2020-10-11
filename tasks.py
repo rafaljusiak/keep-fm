@@ -33,6 +33,11 @@ def makemigrations(c, args=""):
 
 
 @task
+def pytest(c, args=""):
+    docker_run(c, f"pytest . {args}")
+
+
+@task
 def migrate(c):
     docker_run(c, "python manage.py migrate")
 

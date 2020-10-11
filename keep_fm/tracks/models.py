@@ -43,7 +43,7 @@ class Track(ModelMixin, models.Model):
     # Name of the song
     name = models.CharField(_("Name"), max_length=1024)
 
-    # Slug of the song (artist + track name). It's used in filtering to remove
+    # Slug of the song (artist + track name). It's used mostly in filtering to remove
     # duplicated tracks, like when the case is different between scrobbles.
     # Example: "Take Me Out" and "Take me out"
     slug = models.SlugField(null=True, blank=True, max_length=2048)
