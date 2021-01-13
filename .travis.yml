@@ -5,7 +5,6 @@ services:
   - postgresql
 before_install:
   - pip install poetry
-  - psql -c 'create database postgres;' -U postgres
 install:
   - poetry install
   - python manage.py migrate
