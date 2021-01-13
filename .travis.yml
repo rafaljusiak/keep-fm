@@ -3,6 +3,8 @@ python:
   - "3.8"
 services:
   - postgresql
+env:
+  - POSTGRES_HOST=postgres://postgres@localhost/postgres
 before_install:
   - pip install poetry
 install:
