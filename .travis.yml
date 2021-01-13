@@ -3,10 +3,9 @@ python:
   - "3.8"
 services:
   - postgresql
-env:
-  - POSTGRES_HOST=postgres://postgres@localhost/postgres
 before_install:
   - pip install poetry
+  - echo "POSTGRES_HOST=postgres://postgres@localhost/postgres" > .env.local
 install:
   - poetry install
   - python manage.py migrate
