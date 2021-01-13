@@ -5,7 +5,7 @@ services:
   - postgresql
 before_install:
   - pip install poetry
-  - echo "POSTGRES_HOST=postgres://postgres@localhost/postgres" > .env.local
+  - echo "POSTGRES_HOST=localhost" > .env.local
 install:
   - poetry install
   - python manage.py migrate
