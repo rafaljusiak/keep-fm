@@ -1,5 +1,8 @@
 # keep-fm
 
+[![Coverage Status](https://coveralls.io/repos/github/rafaljusiak/keep-fm/badge.svg)](https://coveralls.io/github/rafaljusiak/keep-fm)
+[![Build Status](https://travis-ci.com/rafaljusiak/keep-fm.svg?branch=master)](https://travis-ci.com/rafaljusiak/keep-fm)
+
 Unofficial tool created to save your scrobbles data from https://last.fm locally, and to give opportunity to work with your data.
 **Commercial usage is PROHIBITED** - you can **ONLY** use it for **personal** and **non-public** purpose.
 In other words - this web application **can't be hosted on the internet** and you can **ONLY scrap data from YOUR account**.
