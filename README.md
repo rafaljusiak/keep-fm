@@ -1,7 +1,7 @@
 # keep-fm
 
-[![Coverage Status](https://coveralls.io/repos/github/rafaljusiak/keep-fm/badge.svg)](https://coveralls.io/github/rafaljusiak/keep-fm)
 [![Build Status](https://travis-ci.com/rafaljusiak/keep-fm.svg?branch=master)](https://travis-ci.com/rafaljusiak/keep-fm)
+[![Coverage Status](https://coveralls.io/repos/github/rafaljusiak/keep-fm/badge.svg?branch=master)](https://coveralls.io/github/rafaljusiak/keep-fm?branch=master)
 
 Unofficial tool created to save your scrobbles data from https://last.fm locally, and to give opportunity to work with your data.
 **Commercial usage is PROHIBITED** - you can **ONLY** use it for **personal** and **non-public** purpose.
