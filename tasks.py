@@ -63,8 +63,8 @@ def create_super_user(c):
 
 
 @task
-def update_data(c, args=""):
-    docker_run(c, f"python manage.py scrobbles {args}")
+def update_data(c, usernames):
+    docker_run(c, f"python manage.py scrobbles {usernames}")
 
 
 @task
@@ -104,3 +104,12 @@ def update_dep(c, dependencies):
 @task
 def install_deps(c):
     docker_run(c, "poetry install --no-interaction --no-ansi -vvv")
+
+
+@task
+def initial_setup(c):
+    c.run("touch .env.local")
+    build(c)
+    migrate(c)
+    collectstatic()
+    create_super_user(c)

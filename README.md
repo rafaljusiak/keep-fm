@@ -19,10 +19,11 @@ I wanted to have some option to get a cumulative stats of all of my past account
 ## How-to
 1. Make sure you have installed `Docker` and `docker-compose`.
 2. If you don't have already installed `invoke` - install it with `pip install invoke` command.
-3. Run commands in that order: `invoke build`, `invoke migrate`, `invoke start`.
-4. Create your user account with `invoke create-super-user` command.
+3a. Setup solution with `invoke initial-setup` command.
+3b. At one step you will be asked for your credentials (username, email and password) - you don't need to use the same as your last.fm credentials. 
+4. Execute `invoke start` to run application.
 5. Login to admin dashboard at `http://127.0.0.1:8000/admin` and configure your account.
-6. When your account is ready - run `invoke update-data <your_user_name>` to start fetching your scrobbles from last.fm.
+6. When your account is ready - run `invoke update-data <your_last_fm_user_name>` to start fetching your scrobbles from last.fm.
 
 ### Alpha/in progress features
 - Associate scrobbled tracks with Spotify URLs.
