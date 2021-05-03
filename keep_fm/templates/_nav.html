@@ -1,0 +1,26 @@
+{% if request.user.is_authenticated %}
+  <div class="nav">
+    <a href="{{ url('dashboard') }}">
+      <button type="button">Dashboard</button>
+    </a>
+    <a href="{{ url('top-tracks') }}">
+      <button type="button">Top tracks</button>
+    </a>
+    <a href="{{ url('top-artists') }}">
+      <button type="button">Top artists</button>
+    </a>
+    <a href="{{ url('top-combined') }}">
+      <button type="button">Top combined</button>
+    </a>
+    <a href="{{ url('top-combined-tracks') }}">
+      <button type="button">Top combined tracks</button>
+    </a>
+    <a href="{{ url('top-combined-artists') }}">
+      <button type="button">Top combined artists</button>
+    </a>
+    <a href="{{ url('logout') }}">
+      <button type="button">Logout</button>
+    </a>
+    <hr/>
+  </div>
+{% endif %}
