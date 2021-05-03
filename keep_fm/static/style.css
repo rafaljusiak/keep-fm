@@ -1,0 +1,14 @@
+.nav a {
+    text-decoration: none;
+}
+
+.grid-container {
+    width: 100%;
+}
+
+.grid-column {
+    display: inline-block;
+    margin: 0;
+    padding: 4px;
+    width: 49%;
+}

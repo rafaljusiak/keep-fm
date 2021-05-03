@@ -132,7 +132,7 @@ dmypy.json
 .pyre/
 
 # Static
-static/
+./static/
 
 # Docker override
 docker-compose.override.yml
