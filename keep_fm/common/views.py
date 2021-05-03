@@ -10,7 +10,7 @@ from keep_fm.scrobbles.models import Scrobble
 class DashboardView(generic.TemplateView):
     """Main dashboard view - entry point for a user after login."""
 
-    template_name = "dashboard/base.html"
+    template_name = "dashboard/main.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
