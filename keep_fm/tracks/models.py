@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 from django.db import models
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from keep_fm.common.models import ModelMixin
 from keep_fm.external.spotify.processors import map_track_data, map_track_features_data
