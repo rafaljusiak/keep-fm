@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block subtitle %}- Top combined{% endblock %}
+
 {% block content %}
     <form method="post">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
