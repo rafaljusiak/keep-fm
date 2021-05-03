@@ -3,7 +3,7 @@ version: '3.7'
 services:
   celery:
     container_name: keep_fm_worker
-    command: celery worker -B -l info -A keep_fm.celery
+    command: celery -A keep_fm.celery worker -B -l info
     depends_on:
       - redis
       - db
