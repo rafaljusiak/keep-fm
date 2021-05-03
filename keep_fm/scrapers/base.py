@@ -55,7 +55,7 @@ class Scraper(abc.ABC):
 
     @property
     def all_required_data(self) -> Tuple[str, ...]:
-        """ Returns a tuple of atrribute names that must have some value """
+        """Returns a tuple of atrribute names that must have some value"""
         return self._ALWAYS_REQUIRED + self.REQUIRED_DATA
 
     @property
@@ -80,7 +80,7 @@ class Scraper(abc.ABC):
         self.retry_delay = kwargs.get("retry_delay", settings.SCRAPPER_RETRY_DELAY)
 
     def run(self) -> None:
-        """ Main Scraper method, that is processing given page  """
+        """Main Scraper method, that is processing given page"""
         self.pre_run()
         while True:
             url = self.get_next_url()
@@ -116,7 +116,7 @@ class Scraper(abc.ABC):
         return soup
 
     def pre_run(self) -> None:
-        """ Method running just before the scraper starts to work """
+        """Method running just before the scraper starts to work"""
         if not self.is_ready:
             raise ScraperSetupException(
                 "Tried to run scraper without setup or setup method is invalid"
@@ -145,13 +145,13 @@ class Scraper(abc.ABC):
         raise NotImplementedError
 
     def on_scraper_empty_page(self) -> None:
-        """ This method is executed when scraper finds an empty page """
+        """This method is executed when scraper finds an empty page"""
         pass
 
     def on_scraper_stop(self) -> None:
-        """ This method is executed when scraper stops due to some condition """
+        """This method is executed when scraper stops due to some condition"""
         pass
 
     def on_scraper_finish(self) -> None:
-        """ This method is executed when scraper finishes scraping """
+        """This method is executed when scraper finishes scraping"""
         pass

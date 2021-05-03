@@ -25,7 +25,10 @@ class Migration(migrations.Migration):
                 ),
                 ("name", models.CharField(max_length=256, verbose_name="Name")),
             ],
-            options={"verbose_name": "Artist", "verbose_name_plural": "Artists",},
+            options={
+                "verbose_name": "Artist",
+                "verbose_name_plural": "Artists",
+            },
         ),
         migrations.CreateModel(
             name="Track",
@@ -49,6 +52,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Track", "verbose_name_plural": "Tracks",},
+            options={
+                "verbose_name": "Track",
+                "verbose_name_plural": "Tracks",
+            },
         ),
     ]

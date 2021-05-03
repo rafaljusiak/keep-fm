@@ -28,7 +28,10 @@ class Scrobble(ModelMixin, models.Model):
     )
 
     # Timestamp of a Scrobble (when exactly the track was scrobbled)
-    scrobble_date = models.DateTimeField(_("Scrobble date"), default=timezone.now,)
+    scrobble_date = models.DateTimeField(
+        _("Scrobble date"),
+        default=timezone.now,
+    )
 
     def __str__(self) -> str:
         return f"{self.user_id} {self.track_id} {self.created_at}"

@@ -133,3 +133,6 @@ dmypy.json
 
 # Static
 static/
+
+# Docker override
+docker-compose.override.yml

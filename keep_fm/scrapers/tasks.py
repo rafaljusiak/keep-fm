@@ -14,6 +14,7 @@ def scrap_scrobbles() -> None:
     users = User.objects.filter(lastfm_username__isnull=False)
     for user in users:
         scraper.setup(
-            lastfm_username=user.lastfm_username, only_create=True,
+            lastfm_username=user.lastfm_username,
+            only_create=True,
         )
         scraper.run()

@@ -33,7 +33,7 @@ class DashboardView(generic.TemplateView):
 
 
 class ArtistsRankingView(generic.TemplateView):
-    """ Ranking of user's 300 top listened artists """
+    """Ranking of user's 300 top listened artists"""
 
     template_name = "rankings/artists.html"
 
@@ -46,7 +46,7 @@ class ArtistsRankingView(generic.TemplateView):
 
 
 class TracksRankingView(generic.TemplateView):
-    """ Ranking of user's 300 top listened tracks """
+    """Ranking of user's 300 top listened tracks"""
 
     template_name = "rankings/tracks.html"
 
@@ -74,7 +74,7 @@ class CombinedRankingMixin(generic.FormView):
 
 
 class CombinedRankingView(CombinedRankingMixin, generic.FormView):
-    """ Rankings of logged in and selected Users """
+    """Rankings of logged in and selected Users"""
 
     template_name = "rankings/combined.html"
 
@@ -96,7 +96,7 @@ class CombinedRankingView(CombinedRankingMixin, generic.FormView):
 
 
 class CombinedTracksRankingView(CombinedRankingMixin, generic.FormView):
-    """ Ranking of logged in and selected Users 300 top listened tracks """
+    """Ranking of logged in and selected Users 300 top listened tracks"""
 
     form_class = CombinedRankingForm
     template_name = "rankings/combined-tracks.html"
@@ -114,7 +114,7 @@ class CombinedTracksRankingView(CombinedRankingMixin, generic.FormView):
 
 
 class CombinedArtistsRankingView(CombinedRankingMixin, generic.FormView):
-    """ Ranking of logged in and selected Users 300 top listened artists """
+    """Ranking of logged in and selected Users 300 top listened artists"""
 
     form_class = CombinedRankingForm
     template_name = "rankings/combined-artists.html"

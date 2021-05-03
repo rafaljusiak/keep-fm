@@ -2,7 +2,7 @@ import spotipy
 
 
 class SpotifyConnector:
-    """ Adapter for a Spotify connector """
+    """Adapter for a Spotify connector"""
 
     def get_connector(self) -> spotipy.Spotify:
         return spotipy.Spotify(

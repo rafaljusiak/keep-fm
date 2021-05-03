@@ -11,7 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(name="user", options={},),
+        migrations.AlterModelOptions(
+            name="user",
+            options={},
+        ),
         migrations.AddField(
             model_name="user",
             name="created_at",

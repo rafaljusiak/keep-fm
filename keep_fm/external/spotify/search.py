@@ -30,19 +30,19 @@ class SpotifySearch:
 
 
 class SpotifyAlbumSearch(SpotifySearch):
-    """ Specific implementation of SpotifySearch that loads data about albums. """
+    """Specific implementation of SpotifySearch that loads data about albums."""
 
     search_type = TYPE_ALBUM
 
 
 class SpotifyTrackSearch(SpotifySearch):
-    """ Specific implementation of SpotifySearch that loads data about tracks. """
+    """Specific implementation of SpotifySearch that loads data about tracks."""
 
     search_type = TYPE_TRACK
 
 
 class SpotifySearchQueryBuilder:
-    """ SpotifySearchQueryBuilder creates a valid query form a given params """
+    """SpotifySearchQueryBuilder creates a valid query form a given params"""
 
     def __init__(self):
         self._query_params: List[str] = []

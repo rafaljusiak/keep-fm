@@ -46,6 +46,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Scrobble", "verbose_name_plural": "Scrobbles",},
+            options={
+                "verbose_name": "Scrobble",
+                "verbose_name_plural": "Scrobbles",
+            },
         ),
     ]

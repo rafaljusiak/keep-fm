@@ -1,6 +1,18 @@
 version: '3.7'
 
 services:
+  celery:
+    container_name: keep_fm_worker
+    command: celery worker -B -l info -A keep_fm.celery
+    depends_on:
+      - redis
+      - db
+    env_file:
+      - .env
+      - .env.local
+    image: keep-fm-django
+    volumes:
+      - .:/app
   db:
     image: postgres:12.2-alpine
     container_name: keep_fm_postgres
@@ -13,34 +25,22 @@ services:
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
-    container_name: keep_fm_backend
-    image: keep-fm-backend
     command: gunicorn keep_fm.wsgi:application --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT}
+    container_name: keep_fm_django
+    depends_on:
+      - db
     env_file:
       - .env
       - .env.local
+    image: keep-fm-django
+    ports:
+      - "${DJANGO_PORT}:8000"
     volumes:
       - .:/app
       - ./static:/app/static
-    ports:
-      - "${DJANGO_PORT}:8000"
-    depends_on:
-      - db
-  worker:
-    container_name: keep_fm_worker
-    image: keep-fm-backend
-    command: celery worker -B -l info -A keep_fm.celery
-    depends_on:
-      - redis
-      - db
-    env_file:
-      - .env
-      - .env.local
-    volumes:
-      - .:/app
   redis:
-    image: redis:5.0.8-alpine
     container_name: keep_fm_redis
+    image: redis:5.0.8-alpine
 volumes:
   pgdata:
   static:

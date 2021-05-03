@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterUniqueTogether(
-            name="scrobble", unique_together={("user", "track", "scrobble_date")},
+            name="scrobble",
+            unique_together={("user", "track", "scrobble_date")},
         ),
     ]

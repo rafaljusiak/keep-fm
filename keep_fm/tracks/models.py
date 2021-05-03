@@ -16,7 +16,7 @@ from keep_fm.tracks.slugs import slugify_track
 
 
 class Artist(ModelMixin, models.Model):
-    """ Model that represents an artist performing a songs (Tracks) """
+    """Model that represents an artist performing a songs (Tracks)"""
 
     # Name of the artist
     name = models.CharField(_("Name"), max_length=256)
@@ -30,7 +30,7 @@ class Artist(ModelMixin, models.Model):
 
 
 class Track(ModelMixin, models.Model):
-    """ Model of a song """
+    """Model of a song"""
 
     # Artist that performs the track
     artist = models.ForeignKey(
@@ -55,7 +55,7 @@ class Track(ModelMixin, models.Model):
 
     @cached_property
     def spotify_data(self) -> Optional[Dict[str, Any]]:
-        """ Data about this track got from Spotify API """
+        """Data about this track got from Spotify API"""
         data = get_track_data(self.name, self.artist.name)
         if data:
             data = map_track_data(data)
@@ -63,7 +63,7 @@ class Track(ModelMixin, models.Model):
 
     @cached_property
     def spotify_audio_analysis(self) -> Optional[Dict[str, Any]]:
-        """ Data about audio analysis got from Spotify API """
+        """Data about audio analysis got from Spotify API"""
         spotify_uri = self.spotify_uri or get_track_uri(self.name, self.artist.name)
         if spotify_uri:
             data = get_track_audio_analysis(spotify_uri)
@@ -72,7 +72,7 @@ class Track(ModelMixin, models.Model):
 
     @cached_property
     def spotify_audio_features(self) -> Optional[Dict[str, Any]]:
-        """ Data about audio features got from Spotify API """
+        """Data about audio features got from Spotify API"""
         spotify_uri = self.spotify_uri or get_track_uri(self.name, self.artist.name)
         if spotify_uri:
             data = get_track_audio_features(spotify_uri)
@@ -82,14 +82,14 @@ class Track(ModelMixin, models.Model):
         return None
 
     def set_spotify_uri(self, overwrite: bool = False) -> None:
-        """ Sets spotify_uri and saves the Track. It's not overwriting by default """
+        """Sets spotify_uri and saves the Track. It's not overwriting by default"""
         if not self.spotify_uri or overwrite:
             uri = get_track_uri(self.name, self.artist.name)
             self.spotify_uri = uri
             self.save()
 
     def set_slug(self, overwrite: bool = False) -> None:
-        """ Generates slug if it's not set. With overwrite=True it's re-generating a slug """
+        """Generates slug if it's not set. With overwrite=True it's re-generating a slug"""
         if not self.slug or overwrite:
             self.slug = slugify_track(self.artist.name, self.name)
             self.save()

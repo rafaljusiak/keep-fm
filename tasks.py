@@ -2,6 +2,7 @@ from invoke import task
 
 DOCKER = "docker-compose"
 DOCKER_RUN = f"{DOCKER} run --rm django"
+DOCKER_EXEC = f"{DOCKER} exec --rm django"
 
 
 def docker(c, command, **kwargs):
@@ -10,6 +11,10 @@ def docker(c, command, **kwargs):
 
 def docker_run(c, command, **kwargs):
     c.run(f"{DOCKER_RUN} {command}", **kwargs)
+
+
+def docker_exec(c, command, **kwargs):
+    c.run(f"{DOCKER_EXEC} {command}", **kwargs)
 
 
 @task
@@ -87,23 +92,9 @@ def bandit(c):
 
 
 @task
-def add_dep(c, dependency):
-    docker_run(c, "poetry add " + dependency)
-
-
-@task
-def add_dev_dep(c, dependency):
-    docker_run(c, "poetry add -D " + dependency)
-
-
-@task
-def update_dep(c, dependencies):
-    docker_run(c, "poetry update " + dependencies)
-
-
-@task
 def install_deps(c):
-    docker_run(c, "poetry install --no-interaction --no-ansi -vvv")
+    docker_exec(c, "pip3 install -r requirements.txt")
+    docker_exec(c, "pip3 install -r requirements-dev.txt")
 
 
 @task

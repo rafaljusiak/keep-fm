@@ -8,7 +8,7 @@ from keep_fm.tracks.slugs import slugify_track
 
 
 class ScrobbleProcessor:
-    """ It holds logic of processing and saving scrobbles data in the database """
+    """It holds logic of processing and saving scrobbles data in the database"""
 
     @staticmethod
     def process_and_save(
@@ -35,5 +35,7 @@ class ScrobbleProcessor:
 
         # Create Scrobble object and associate it with a proper Track and User
         return Scrobble.objects.get_or_create(
-            track=track, user_id=user_id, scrobble_date=timestamp,
+            track=track,
+            user_id=user_id,
+            scrobble_date=timestamp,
         )

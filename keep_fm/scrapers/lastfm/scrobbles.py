@@ -72,7 +72,7 @@ class LastFmScrobblesScraper(LastFmScraper):
         print(f"Last page: {self.page_number}")
 
     def parse_timestamp(self, timestamp: str) -> datetime:
-        """ Parses string timestamp from last.fm and creates adequate datetime object """
+        """Parses string timestamp from last.fm and creates adequate datetime object"""
         cleaned = timestamp.replace(",", "").split(" ")
         day = cleaned[1]
         month = timezone.datetime.strptime(cleaned[2], "%b").month

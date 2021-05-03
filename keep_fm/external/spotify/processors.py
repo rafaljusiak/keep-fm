@@ -37,7 +37,7 @@ def map_track_features_data(
 
 
 def map_album_data(track_album_data: Dict[str, Any]) -> Dict[str, Optional[str]]:
-    """ Maps album track data from Spotify API """
+    """Maps album track data from Spotify API"""
     name = track_album_data.get("name")
     return {
         "name": name,

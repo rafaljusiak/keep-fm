@@ -1,11 +1,11 @@
 class ScraperSetupException(Exception):
-    """ Invalid Scraper setup """
+    """Invalid Scraper setup"""
 
     pass
 
 
 class ScraperEmptyPage(Exception):
-    """ Scraper found an empty page """
+    """Scraper found an empty page"""
 
     pass
 

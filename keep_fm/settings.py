@@ -24,6 +24,7 @@ ALLOWED_HOSTS = env.get("ALLOWED_HOSTS", [])
 # Application definition
 
 AUTH_USER_MODEL = "users.User"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -105,9 +106,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 

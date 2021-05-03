@@ -6,7 +6,7 @@ from keep_fm.common.models import ModelMixin
 
 
 class User(ModelMixin, AbstractUser):
-    """ Application User """
+    """Application User"""
 
     objects: UserManager = UserManager()
 

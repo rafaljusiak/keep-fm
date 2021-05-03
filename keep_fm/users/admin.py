@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
@@ -15,4 +17,4 @@ class UserAdmin(DjangoUserAdmin):
 
     fieldsets = DjangoUserAdmin.fieldsets + (
         ("Configuration", {"fields": ("lastfm_username",)}),
-    )  # type: ignore
+    )

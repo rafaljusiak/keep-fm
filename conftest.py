@@ -23,7 +23,9 @@ def post_request(test_user: User) -> WSGIRequest:
 
 @pytest.fixture
 def test_user(db) -> User:
-    user = User.objects.create_user(username="testuser",)
+    user = User.objects.create_user(
+        username="testuser",
+    )
     user.lastfm_username = "!@#$%^&*()"
     user.save()
     return user

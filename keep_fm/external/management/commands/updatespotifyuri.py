@@ -19,7 +19,9 @@ class Command(BaseCommand):
         tracks = (
             Track.objects.all()
             if overwrite
-            else Track.objects.filter(spotify_uri__isnull=True,)
+            else Track.objects.filter(
+                spotify_uri__isnull=True,
+            )
         )
         tracks = tracks.select_related("artist")
 
