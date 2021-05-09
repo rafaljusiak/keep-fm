@@ -12,7 +12,7 @@ class ScraperEmptyPage(Exception):
 
 class ScraperStop(Exception):
     """
-    Scraper stopped due to some conition.
+    Scraper stopped due to some condition.
     It should be raised manually in a process_page (if needed)
     """
 
