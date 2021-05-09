@@ -9,9 +9,5 @@
         <button type="submit">Combine</button>
     </form>
 
-    <ol>
-        {% for row in top_artists %}
-            <li>{{ row.track__artist__name }} {{ row.count }}</li>
-        {% endfor %}
-    </ol>
+    {% include "rankings/_ranking.html" %}
 {% endblock %}

@@ -6,7 +6,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from keep_fm.common.models import ModelMixin
-from keep_fm.scrobbles.querysets import ScrobblesQueryset
 from keep_fm.tracks.models import Track
 
 
@@ -15,8 +14,6 @@ class Scrobble(ModelMixin, models.Model):
     Model that represents a Last.fm scrobble.
     In general - it's basically a timestamp of a Track listened by the User.
     """
-
-    objects = ScrobblesQueryset.as_manager()
 
     user = models.ForeignKey(
         "users.User",

@@ -4,7 +4,7 @@ import pytest
 from django.core.handlers.wsgi import WSGIRequest
 from django.views import View
 
-from keep_fm.common import views
+from keep_fm.scrobbles import views
 
 
 @pytest.mark.parametrize(
@@ -13,7 +13,6 @@ from keep_fm.common import views
         pytest.param(views.DashboardView),
         pytest.param(views.ArtistsRankingView),
         pytest.param(views.TracksRankingView),
-        pytest.param(views.CombinedRankingView),
         pytest.param(views.CombinedArtistsRankingView),
         pytest.param(views.CombinedTracksRankingView),
     ],

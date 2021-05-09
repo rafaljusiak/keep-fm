@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block subtitle %}- Top {{ ranking.type.value }}s{% endblock %}
+
+{% block content %}
+  {% include "rankings/_ranking.html" %}
+{% endblock %}
