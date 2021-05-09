@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 from django.db import models
 from django.utils.functional import cached_property
@@ -20,6 +20,10 @@ class Artist(ModelMixin, models.Model):
 
     # Name of the artist
     name = models.CharField(_("Name"), max_length=256)
+
+    @classmethod
+    def process_and_save(cls, artist_name: str) -> Tuple["Artist", bool]:
+        return Artist.objects.get_or_create(name=artist_name)
 
     def __str__(self) -> str:
         return self.name
@@ -80,6 +84,25 @@ class Track(ModelMixin, models.Model):
                 data = map_track_features_data(data)
             return data
         return None
+
+    @classmethod
+    def process_and_save(
+        cls, artist_name: str, track_name: str
+    ) -> Tuple["Track", bool]:
+        artist, _ = Artist.process_and_save(artist_name=artist_name)
+        created = False
+
+        # Get a track slug to find if track already exists in the database
+        # and to not create any duplicate.
+        track_slug = slugify_track(artist_name, track_name)
+        track = Track.objects.filter(slug=track_slug).first()
+
+        # If track doesn't exists - create a new one and set slug for it
+        if not track:
+            track = Track.objects.create(name=track_name, artist=artist)
+            track.set_slug()
+            created = True
+        return track, created
 
     def set_spotify_uri(self, overwrite: bool = False) -> None:
         """Sets spotify_uri and saves the Track. It's not overwriting by default"""

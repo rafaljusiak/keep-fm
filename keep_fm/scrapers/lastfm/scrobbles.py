@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 from django.utils import timezone
 
 from keep_fm.scrapers.exceptions import ScraperEmptyPage, ScraperStop
-from keep_fm.scrobbles.processors import ScrobbleProcessor
 
+from keep_fm.scrobbles.models import Scrobble
 from keep_fm.tracks.utils.naming import clean_track_name
 from keep_fm.scrapers.lastfm.base import LastFmScraper
 
@@ -51,7 +51,7 @@ class LastFmScrobblesScraper(LastFmScraper):
             timestamp = self.parse_timestamp(raw_timestamp)
 
             # Process and save scrobble data
-            _, created = ScrobbleProcessor.process_and_save(
+            _, created = Scrobble.process_and_save(
                 user_id=self.user_id,
                 artist_name=track_artist,
                 track_name=track_name,

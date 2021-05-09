@@ -35,6 +35,8 @@ services:
     image: keep-fm-django
     ports:
       - "${DJANGO_PORT}:8000"
+    stdin_open: true
+    tty: true
     volumes:
       - .:/app
       - ./static:/app/static
