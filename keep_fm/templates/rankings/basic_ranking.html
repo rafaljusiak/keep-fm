@@ -1,7 +1,9 @@
-{% extends "base.html" %}
+{% extends "rankings/base.html" %}
 
 {% block subtitle %}- Top {{ ranking.type.value }}s{% endblock %}
 
 {% block content %}
+  {{ super() }}
+
   {% include "rankings/_ranking.html" %}
 {% endblock %}

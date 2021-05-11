@@ -1,6 +1,6 @@
 {% if ranking %}
 
-  <h3>Top {{ ranking.type.value }}s ({{ ranking.period_type.label }})</h3>
+  <h3>Top {{ ranking.type.value }}s ({{ ranking.label }})</h3>
 
   {% if ranking.type.value == "artist" %}
     {% include "rankings/_ranking_artists.html" %}

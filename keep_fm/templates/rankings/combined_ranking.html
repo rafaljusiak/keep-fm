@@ -3,11 +3,13 @@
 {% block subtitle %}- Top combined artists{% endblock %}
 
 {% block content %}
-    <form method="post">
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        {{ form }}
-        <button type="submit">Combine</button>
-    </form>
+  {{ super() }}
 
-    {% include "rankings/_ranking.html" %}
+  <form method="post">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+      {{ form }}
+      <button type="submit">Combine</button>
+  </form>
+
+  {% include "rankings/_ranking.html" %}
 {% endblock %}

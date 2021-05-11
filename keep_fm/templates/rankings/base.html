@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="nav">
+    {% for filter in ranking_filters.html_period_filters %}
+      <a href="{{ filter.href }}">
+        <button type="button">{{ filter.label }}</button>
+      </a>
+    {% endfor %}
+    <hr/>
+  </div>
+{% endblock %}

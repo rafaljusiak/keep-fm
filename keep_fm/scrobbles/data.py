@@ -1,11 +1,15 @@
 import enum
-from datetime import timedelta
-from typing import Sequence, Union
+from dataclasses import dataclass
+from datetime import timedelta, date
+from typing import Sequence, Union, List, Dict, Optional
+from urllib.parse import urlencode
 
+from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Count, QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from keep_fm.common.parse import get_date_or_none, get_str_or_none
 from keep_fm.scrobbles.models import Scrobble
 
 
@@ -39,41 +43,49 @@ class RankingPeriodType(enum.Enum):
 class Ranking:
     queryset: QuerySet["Scrobble"]
     type: RankingType
-    period_type: RankingPeriodType
-    period_label: str
+    label: str
 
     def __init__(
         self,
         queryset: QuerySet["Scrobble"],
         ranking_type: RankingType,
-        ranking_period_type: RankingPeriodType,
+        label: str,
     ):
         self.queryset = queryset
         self.type = ranking_type
-        self.period_type = ranking_period_type
-        self.period_label = ranking_period_type.label
+        self.label = label
 
     @classmethod
     def construct(
         cls,
-        offset: int,
-        limit: int,
         ranking_type: RankingType,
-        ranking_period_type: RankingPeriodType = RankingPeriodType.ALL_TIME,
-        user_ids: Sequence[Union[int, str]] = None,
-        scrobbles: QuerySet[Scrobble] = None,
+        offset: int = 0,
+        limit: int = 30,
+        default_ranking_period_type: RankingPeriodType = RankingPeriodType.ALL_TIME,
         descending: bool = False,
+        ranking_filters: "RankingFilters" = None,
+        scrobbles: QuerySet[Scrobble] = None,
+        user_ids: Sequence[Union[int, str]] = None,
     ) -> "Ranking":
         """Creates ranking of tracks for given parameters"""
         # Only one of user_ids/scrobbles must be provided
         assert bool(user_ids) ^ (scrobbles is not None)
+
+        # Use empty RankingFilters if none was passed
+        if ranking_filters is None:
+            ranking_filters = RankingFilters.empty()
 
         # Get scrobbles associated only to chosen listeners
         if scrobbles is None:
             scrobbles = Scrobble.objects.filter(user_id__in=user_ids)
 
         # Get scrobbles only from specified period
-        date_from, date_to = ranking_period_type.date_from, ranking_period_type.date_to
+        date_from, date_to = ranking_filters.date_from, ranking_filters.date_to
+        if not date_from:
+            date_from = default_ranking_period_type.date_from
+        if not date_to:
+            date_to = default_ranking_period_type.date_to
+
         if date_from:
             scrobbles = scrobbles.filter(scrobble_date__date__gte=date_from)
         if date_to:
@@ -91,6 +103,8 @@ class Ranking:
             scrobbles = scrobbles.values("track__artist__name").annotate(
                 count=Count("track__artist__name"),
             )
+        else:
+            raise NotImplementedError
 
         scrobbles = scrobbles.order_by("count" if descending else "-count")
         scrobbles = scrobbles[offset : offset + limit]
@@ -98,6 +112,70 @@ class Ranking:
         ranking = cls(
             queryset=scrobbles,
             ranking_type=ranking_type,
-            ranking_period_type=ranking_period_type,
+            label=ranking_filters.label or default_ranking_period_type.label,
         )
         return ranking
+
+
+@dataclass
+class HTMLRankingFilter:
+    label: str
+    href: str
+
+
+@dataclass
+class RankingFilters:
+    html_period_filters: List[HTMLRankingFilter]
+    query_dict: Dict[str, Union[bool, int, str]]
+
+    date_from: Optional[date] = None
+    date_to: Optional[date] = None
+    label: Optional[str] = None
+
+    @classmethod
+    def empty(cls):
+        """Returns empty RankingFilter object"""
+        return cls(
+            html_period_filters=list(),
+            query_dict=dict(),
+        )
+
+    @classmethod
+    def from_request(cls, request: WSGIRequest) -> "RankingFilters":
+        """
+        Extracts selected filters from the query string.
+        Additionally it prepares a list of HTMLRankingFilter objects that can be used in
+        HTML template to render filters to select.
+        """
+        query_dict = dict(request.GET)
+
+        # Extract filters
+        date_from = get_date_or_none(query_dict.get("date_from"))
+        date_to = get_date_or_none(query_dict.get("date_to"))
+        label = get_str_or_none(query_dict.get("label"))
+
+        # Prepare filter urls
+        html_period_filters = []
+        for ranking_period in RankingPeriodType:
+            query_params = query_dict.copy()
+
+            query_params["date_from"] = ranking_period.date_from or ""
+            query_params["date_to"] = ranking_period.date_to or ""
+            query_params["label"] = ranking_period.label or ""
+
+            query_string = urlencode(query_params)
+            href = f"{request.path}?{query_string}"
+            html_period_filters.append(
+                HTMLRankingFilter(
+                    label=ranking_period.label,
+                    href=href,
+                )
+            )
+
+        return cls(
+            html_period_filters=html_period_filters,
+            query_dict=query_dict,
+            date_from=date_from,
+            date_to=date_to,
+            label=label,
+        )

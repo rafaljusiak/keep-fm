@@ -4,7 +4,7 @@ from django import forms
 from django.views import generic
 
 from keep_fm.scrobbles.forms import CombinedRankingForm
-from keep_fm.scrobbles.data import Ranking, RankingType, RankingPeriodType
+from keep_fm.scrobbles.data import Ranking, RankingType, RankingFilters
 from keep_fm.scrobbles.models import Scrobble
 
 
@@ -25,19 +25,13 @@ class DashboardView(generic.TemplateView):
         context["last_scrobbles"] = last_scrobbles
 
         top_tracks = Ranking.construct(
-            offset=0,
-            limit=30,
             ranking_type=RankingType.TRACK,
-            ranking_period_type=RankingPeriodType.ALL_TIME,
             scrobbles=scrobbles_qs,
         )
         context["top_tracks"] = top_tracks
 
         top_artists = Ranking.construct(
-            offset=0,
-            limit=30,
             ranking_type=RankingType.ARTIST,
-            ranking_period_type=RankingPeriodType.ALL_TIME,
             scrobbles=scrobbles_qs,
         )
         context["top_artists"] = top_artists
@@ -48,16 +42,22 @@ class DashboardView(generic.TemplateView):
 class RankingView(generic.TemplateView):
     template_name = "rankings/basic_ranking.html"
     ranking_type: RankingType
+    limit: int = 300
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["ranking"] = Ranking.construct(
+
+        ranking_filters = RankingFilters.from_request(request=self.request)
+        ranking = Ranking.construct(
             offset=0,
-            limit=30,
+            limit=self.limit,
+            ranking_filters=ranking_filters,
             ranking_type=self.ranking_type,
-            ranking_period_type=RankingPeriodType.ALL_TIME,
             user_ids=[self.request.user.id],
         )
+
+        context["ranking"] = ranking
+        context["ranking_filters"] = ranking_filters
         return context
 
 
@@ -81,6 +81,7 @@ class CombinedRankingView(generic.FormView):
 
     form_class: Type[forms.Form] = CombinedRankingForm
     ranking_type: RankingType
+    limit: int = 300
 
     def get_success_url(self):
         user_id = self.request.POST.get("user")
@@ -94,9 +95,8 @@ class CombinedRankingView(generic.FormView):
         if user_id:
             top_tracks = Ranking.construct(
                 offset=0,
-                limit=30,
+                limit=self.limit,
                 ranking_type=self.ranking_type,
-                ranking_period_type=RankingPeriodType.ALL_TIME,
                 user_ids=[self.request.user.id, user_id],
             )
             context["ranking"] = top_tracks
