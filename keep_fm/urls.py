@@ -35,6 +35,16 @@ urls = [
         login_required(scrobbles.CombinedArtistsRankingView.as_view()),
         name="top-combined-artists",
     ),
+    path(
+        "artist/<int:artist_id>/global",
+        login_required(scrobbles.ArtistGlobalRankingView.as_view()),
+        name="artist-global-ranking",
+    ),
+    path(
+        "artist/<int:artist_id>/personal",
+        login_required(scrobbles.ArtistPersonalRankingView.as_view()),
+        name="artist-personal-ranking",
+    ),
 ]
 
 

@@ -9,7 +9,7 @@ from django.db.models import Count, QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from keep_fm.common.parse import get_date_or_none, get_str_or_none
+from keep_fm.common.parse import get_date_or_none, get_str_or_none, get_int_or_none
 from keep_fm.scrobbles.models import Scrobble
 
 
@@ -65,6 +65,7 @@ class Ranking:
         descending: bool = False,
         ranking_filters: "RankingFilters" = None,
         scrobbles: QuerySet[Scrobble] = None,
+        artist_ids: Sequence[Union[int, str]] = None,
         user_ids: Sequence[Union[int, str]] = None,
     ) -> "Ranking":
         """Creates ranking of tracks for given parameters"""
@@ -78,6 +79,10 @@ class Ranking:
         # Get scrobbles associated only to chosen listeners
         if scrobbles is None:
             scrobbles = Scrobble.objects.filter(user_id__in=user_ids)
+
+        # Filter by artist id
+        if artist_ids is not None:
+            scrobbles = scrobbles.filter(track__artist_id__in=artist_ids)
 
         # Get scrobbles only from specified period
         date_from, date_to = ranking_filters.date_from, ranking_filters.date_to
@@ -97,10 +102,16 @@ class Ranking:
         # Handle specific type of ranking
         if ranking_type == RankingType.TRACK:
             scrobbles = scrobbles.values(
-                "track_id", "track__name", "track__artist__name"
+                "track_id",
+                "track__name",
+                "track__artist__name",
+                "track__artist_id",
             ).annotate(count=Count("track_id"))
         elif ranking_type == RankingType.ARTIST:
-            scrobbles = scrobbles.values("track__artist__name").annotate(
+            scrobbles = scrobbles.values(
+                "track__artist__name",
+                "track__artist_id",
+            ).annotate(
                 count=Count("track__artist__name"),
             )
         else:
@@ -132,6 +143,8 @@ class RankingFilters:
     date_to: Optional[date] = None
     label: Optional[str] = None
 
+    artist_id: Optional[int] = None
+
     @classmethod
     def empty(cls):
         """Returns empty RankingFilter object"""
@@ -153,6 +166,7 @@ class RankingFilters:
         date_from = get_date_or_none(query_dict.get("date_from"))
         date_to = get_date_or_none(query_dict.get("date_to"))
         label = get_str_or_none(query_dict.get("label"))
+        artist_id = get_int_or_none(query_dict.get("artist_id"))
 
         # Prepare filter urls
         html_period_filters = []
@@ -178,4 +192,5 @@ class RankingFilters:
             date_from=date_from,
             date_to=date_to,
             label=label,
+            artist_id=artist_id,
         )

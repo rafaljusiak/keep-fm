@@ -30,3 +30,14 @@ def get_str_or_none(v: Union[None, str, List[str]]) -> Optional[str]:
     if v == "":
         return None
     return cast(str, v)
+
+
+def get_int_or_none(v: Union[None, str, List[str]]) -> Optional[int]:
+    v = get_str_or_none(v)
+
+    if v is not None:
+        try:
+            return int(v)
+        except ValueError:
+            return None
+    return None

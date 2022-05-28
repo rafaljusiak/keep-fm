@@ -1,6 +1,7 @@
-from typing import Type
+from typing import List, Optional, Type, Union, cast
 
 from django import forms
+from django.db.models import QuerySet
 from django.views import generic
 
 from keep_fm.scrobbles.forms import CombinedRankingForm
@@ -44,6 +45,18 @@ class RankingView(generic.TemplateView):
     ranking_type: RankingType
     limit: int = 300
 
+    @property
+    def artist_ids(self) -> Optional[List[Union[str, int]]]:
+        return None
+
+    @property
+    def user_ids(self) -> Optional[List[Union[str, int]]]:
+        return None
+
+    @property
+    def scrobbles(self) -> Optional[QuerySet[Scrobble]]:
+        return None
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -53,7 +66,9 @@ class RankingView(generic.TemplateView):
             limit=self.limit,
             ranking_filters=ranking_filters,
             ranking_type=self.ranking_type,
-            user_ids=[self.request.user.id],
+            scrobbles=self.scrobbles,
+            artist_ids=self.artist_ids,
+            user_ids=self.user_ids,
         )
 
         context["ranking"] = ranking
@@ -61,13 +76,26 @@ class RankingView(generic.TemplateView):
         return context
 
 
-class ArtistsRankingView(RankingView):
+class PersonalRankingView(RankingView):
+    @property
+    def user_ids(self) -> List[Union[str, int]]:
+        user_id = cast(int, self.request.user.id)
+        return [user_id]
+
+
+class GlobalRankingView(RankingView):
+    @property
+    def scrobbles(self):
+        return Scrobble.objects.all()
+
+
+class ArtistsRankingView(PersonalRankingView):
     """Ranking of user's 300 top listened artists"""
 
     ranking_type = RankingType.ARTIST
 
 
-class TracksRankingView(RankingView):
+class TracksRankingView(PersonalRankingView):
     """Ranking of user's 300 top listened tracks"""
 
     ranking_type = RankingType.TRACK
@@ -82,6 +110,7 @@ class CombinedRankingView(generic.FormView):
     form_class: Type[forms.Form] = CombinedRankingForm
     ranking_type: RankingType
     limit: int = 300
+    template_name = "rankings/combined_ranking.html"
 
     def get_success_url(self):
         user_id = self.request.POST.get("user")
@@ -107,7 +136,6 @@ class CombinedTracksRankingView(CombinedRankingView):
     """Ranking of logged in and selected Users 300 top listened tracks"""
 
     form_class = CombinedRankingForm
-    template_name = "rankings/combined_ranking.html"
     ranking_type = RankingType.TRACK
 
 
@@ -115,5 +143,18 @@ class CombinedArtistsRankingView(CombinedRankingView):
     """Ranking of logged in and selected Users 300 top listened artists"""
 
     form_class = CombinedRankingForm
-    template_name = "rankings/combined_ranking.html"
     ranking_type = RankingType.ARTIST
+
+
+class ArtistLookupMixin(generic.TemplateView):
+    @property
+    def artist_ids(self) -> Optional[List[Union[str, int]]]:
+        return [cast(int, self.kwargs["artist_id"])]
+
+
+class ArtistGlobalRankingView(ArtistLookupMixin, GlobalRankingView):
+    ranking_type = RankingType.TRACK
+
+
+class ArtistPersonalRankingView(ArtistLookupMixin, PersonalRankingView):
+    ranking_type = RankingType.TRACK

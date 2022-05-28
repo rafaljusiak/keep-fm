@@ -11,7 +11,12 @@
   <ul>
       {% for scrobble in last_scrobbles %}
           <li>
-            [{{ scrobble.scrobble_date.strftime("%Y-%m-%d %H:%M") }}] {{ scrobble.track.artist.name }} - {{ scrobble.track.name }}
+            [{{ scrobble.scrobble_date.strftime("%Y-%m-%d %H:%M") }}]
+
+            <a href="{{ url('artist-personal-ranking', kwargs={'artist_id': scrobble.track.artist_id}) }}">
+              {{ scrobble.track.artist.name }}
+            </a>
+            - {{ scrobble.track.name }}
           </li>
       {% endfor %}
   </ul>
