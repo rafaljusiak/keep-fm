@@ -85,14 +85,15 @@ class Scraper(abc.ABC):
             print(f"Processing url {url}")
             retry = 0
             while retry < self.max_retries:
+                soup = self.prepare_soup(url)
                 try:
-                    soup = self.prepare_soup(url)
                     self.process_page(soup)
                     break
                 except ScraperEmptyPage:
                     print(
                         f"Invalid selector or found empty page [{retry}/{self.max_retries}]"
                     )
+                    print(f"Content: {soup}")
                     self.on_scraper_empty_page()
                     time.sleep(self.retry_delay)
                     retry += 1
