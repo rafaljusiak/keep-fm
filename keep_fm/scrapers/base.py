@@ -110,7 +110,7 @@ class Scraper(abc.ABC):
         Makes a GET request nad prepares BeautifulSoup object with the
         page content.
         """
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"})
+        r = requests.post("https://9edinr4vjl.execute-api.us-west-2.amazonaws.com/dev", json={"url": url})
         soup = BeautifulSoup(r.text, "html.parser")
         return soup
 
