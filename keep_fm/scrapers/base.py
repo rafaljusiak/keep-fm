@@ -84,6 +84,7 @@ class Scraper(abc.ABC):
         self.pre_run()
         while True:
             url = self.get_next_url()
+            print(f"Processing url {url}")
             retry = 0
             while retry < self.max_retries:
                 try:

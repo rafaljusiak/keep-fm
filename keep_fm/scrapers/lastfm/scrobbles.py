@@ -30,11 +30,13 @@ class LastFmScrobblesScraper(LastFmScraper):
         self.only_create = kwargs.get("only_create", False)
 
     def process_page(self, soup: BeautifulSoup) -> None:
+        print("Processing next page")
         # Get all rows with scrobbles
         rows = soup.find_all("tr", class_="chartlist-row")
 
         # Iterate over all rows and extract: track name, artist and scrobble timestamp
         for row in rows:
+            print("Processing row ...")
             raw_track_name = row.find("td", class_="chartlist-name").find("a").string
             raw_track_artist = (
                 row.find("td", class_="chartlist-artist").find("a").string
