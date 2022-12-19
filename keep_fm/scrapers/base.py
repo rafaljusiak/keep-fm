@@ -50,9 +50,6 @@ class Scraper(abc.ABC):
     # How many seconds should wait before making next request to the page (in seconds)
     retry_delay: int
 
-    def __init__(self):
-        self.http = urllib3.PoolManager()
-
     @property
     def all_required_data(self) -> Tuple[str, ...]:
         """Returns a tuple of atrribute names that must have some value"""
@@ -112,7 +109,7 @@ class Scraper(abc.ABC):
         Makes a GET request nad prepares BeautifulSoup object with the
         page content.
         """
-        r = self.http.request("GET", url)
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"})
         soup = BeautifulSoup(r.data, "html.parser")
         return soup
 
