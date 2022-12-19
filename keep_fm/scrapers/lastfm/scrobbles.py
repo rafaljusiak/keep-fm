@@ -36,7 +36,6 @@ class LastFmScrobblesScraper(LastFmScraper):
 
         # Iterate over all rows and extract: track name, artist and scrobble timestamp
         for row in rows:
-            print("Processing row ...")
             raw_track_name = row.find("td", class_="chartlist-name").find("a").string
             raw_track_artist = (
                 row.find("td", class_="chartlist-artist").find("a").string
