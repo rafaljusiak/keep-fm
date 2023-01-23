@@ -8,6 +8,6 @@ markupsafe==2.0.1
 python-env-loader==0.0.2
 psycopg2==2.9.1
 redis==3.5.3
-spotipy==2.18.0
+spotipy==2.22.1
 tqdm==4.61.2
 urllib3==1.26.6
